@@ -1,5 +1,9 @@
 module Random.Cpf exposing (cpf)
 
+{-| Generate a random CP
+@docs cpf
+-}
+
 import Random exposing (Generator)
 import Cpf exposing (CPF)
 import Internals
