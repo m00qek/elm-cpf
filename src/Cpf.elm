@@ -1,12 +1,14 @@
-module Cpf exposing (CPF, fromList, toString)
+module Cpf exposing (CPF, fromList, fromText, toString, show)
 
 {-| Manipulate and generate brazilian CPFs
-@docs CPF, fromList, toString
+@docs CPF, fromList, fromText, toString, show
 -}
 
+import Extra.List exposing (cons, dropLast, last, partition, penultimate, zip)
 import Applicative.Function exposing (liftA3)
-import Extra.List exposing (dropLast, last, partition, penultimate, zip)
+import String
 import List
+import Char
 
 
 {-| A brazilian CPF
@@ -61,6 +63,19 @@ fromList =
     liftA3 (Maybe.map3 create) (Just << dropLast 2) penultimate last
         >> Result.fromMaybe "Invalid input."
         >> Result.andThen identity
+
+
+{-| Turn a valid string into a CPF.
+(fromText "12345678909" |> Result.map show) == Ok "123.456.789-09"
+(fromText "123.456.789-09" |> Result.map show) == Ok "123.456.789-09"
+-}
+fromText : String -> Result String CPF
+fromText =
+    String.toList
+        >> List.filter Char.isDigit
+        >> List.map (String.toInt << String.fromChar)
+        >> List.foldr (Result.map2 cons) (Ok [])
+        >> Result.andThen fromList
 
 
 {-| Turn a CPF into a string.
