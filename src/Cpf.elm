@@ -1,7 +1,7 @@
-module Cpf exposing (CPF, fromList, fromText, toString, show)
+module Cpf exposing (CPF, Error, fromList, fromText, toString, show)
 
 {-| Manipulate and generate brazilian CPFs
-@docs CPF, fromList, fromText, toString, show
+@docs CPF, Error, fromList, fromText, toString, show
 -}
 
 import Extra.List exposing (cons, dropLast, last, partition, penultimate)
