@@ -1,6 +1,6 @@
 module Random.Cpf exposing (cpf)
 
-{-| Generate a random CP
+{-| Generate a random CPF
 @docs cpf
 -}
 
