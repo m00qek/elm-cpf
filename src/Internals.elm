@@ -1,10 +1,17 @@
-module Internals exposing (CPF(..), create, validate)
+module Internals exposing (CPF(..), Error(..), create, validate)
 
 import Extra.List exposing (zip)
 
 
 type CPF
     = CPF (List Int) Int Int
+
+
+type Error
+    = InvalidInput
+    | InvalidLength
+    | InvalidFirstDV
+    | InvalidSecondDV
 
 
 mod =
@@ -34,14 +41,14 @@ sndDV dv1 numbers =
         |> dv
 
 
-validate : List Int -> Int -> Int -> Result String CPF
+validate : List Int -> Int -> Int -> Result Error CPF
 validate numbers dv1 dv2 =
     if List.length numbers /= 9 then
-        Err "Invalid CPF length."
+        Err InvalidLength
     else if dv1 /= fstDV numbers then
-        Err "The first DV is wrong!"
+        Err InvalidFirstDV
     else if dv2 /= sndDV dv1 numbers then
-        Err "The second DV is wrong!"
+        Err InvalidSecondDV
     else
         Ok (CPF numbers dv1 dv2)
 
