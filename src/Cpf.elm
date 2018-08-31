@@ -1,4 +1,4 @@
-module Cpf exposing (CPF, Error, fromList, fromText, toString, show)
+module Cpf exposing (CPF, Error(..), fromList, fromText, toString, show)
 
 {-| Manipulate and generate brazilian CPFs
 
@@ -9,7 +9,7 @@ module Cpf exposing (CPF, Error, fromList, fromText, toString, show)
 import Char
 import Control.Applicative exposing (liftA3)
 import Extra.List exposing (cons, dropLast, last, partition, penultimate)
-import Internals exposing (validate)
+import Internals exposing (firstDV, secondDV)
 import List
 import String
 
@@ -22,8 +22,25 @@ type alias CPF =
 
 {-| Possible errors when dealing with CPFs
 -}
-type alias Error =
-    Internals.Error
+type Error
+    = InvalidInput
+    | InvalidLength
+    | InvalidFirstDV
+    | InvalidSecondDV
+
+
+validate numbers dv1 dv2 =
+    if List.length numbers /= 9 then
+        Err InvalidLength
+
+    else if dv1 /= firstDV numbers then
+        Err InvalidFirstDV
+
+    else if dv2 /= secondDV dv1 numbers then
+        Err InvalidSecondDV
+
+    else
+        Ok (Internals.CPF numbers dv1 dv2)
 
 
 {-| Turn a valid list of integers into a CPF.
@@ -34,7 +51,7 @@ type alias Error =
 fromList : List Int -> Result Error CPF
 fromList =
     liftA3 (Maybe.map3 validate) (Just << dropLast 2) penultimate last
-        >> Result.fromMaybe Internals.InvalidLength
+        >> Result.fromMaybe InvalidLength
         >> Result.andThen identity
 
 
@@ -51,7 +68,7 @@ fromText =
         >> List.filter Char.isDigit
         >> List.map String.fromChar
         >> List.map String.toInt
-        >> List.map (Result.fromMaybe Internals.InvalidInput)
+        >> List.map (Result.fromMaybe InvalidInput)
         >> List.foldr (Result.map2 cons) (Ok [])
         >> Result.andThen fromList
 
