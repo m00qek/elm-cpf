@@ -1,15 +1,17 @@
 module Cpf exposing (CPF, Error, fromList, fromText, toString, show)
 
 {-| Manipulate and generate brazilian CPFs
+
 @docs CPF, Error, fromList, fromText, toString, show
+
 -}
 
-import Extra.List exposing (cons, dropLast, last, partition, penultimate)
-import Applicative.Function exposing (liftA3)
-import Internals exposing (validate)
-import String
-import List
 import Char
+import Control.Applicative exposing (liftA3)
+import Extra.List exposing (cons, dropLast, last, partition, penultimate)
+import Internals exposing (validate)
+import List
+import String
 
 
 {-| A brazilian CPF
@@ -26,7 +28,7 @@ type alias Error =
 
 {-| Turn a valid list of integers into a CPF.
 
-    (fromList [1,2,3,4,5,6,7,8,9,0,9] |> Result.map show) == Ok "123.456.789-09"
+    (fromList [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 9 ] |> Result.map show) == Ok "123.456.789-09"
 
 -}
 fromList : List Int -> Result Error CPF
@@ -39,6 +41,7 @@ fromList =
 {-| Turn a valid string into a CPF.
 
     (fromText "12345678909" |> Result.map show) == Ok "123.456.789-09"
+
     (fromText "123.456.789-09" |> Result.map show) == Ok "123.456.789-09"
 
 -}
@@ -69,8 +72,8 @@ show (Internals.CPF numbers dv1 dv2) =
         withDots =
             List.concat << List.intersperse [ "." ] << Extra.List.partition 3
     in
-        String.concat
-            [ List.map Basics.toString numbers |> withDots |> String.concat
-            , "-"
-            , List.map Basics.toString [ dv1, dv2 ] |> String.concat
-            ]
+    String.concat
+        [ List.map Basics.toString numbers |> withDots |> String.concat
+        , "-"
+        , List.map Basics.toString [ dv1, dv2 ] |> String.concat
+        ]
