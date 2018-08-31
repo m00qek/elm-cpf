@@ -3,7 +3,7 @@
     "name": "m00qek/elm-cpf",
     "summary": "Manipulate and generate brazilian CPFs",
     "license": "BSD-3-Clause",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "exposed-modules": [
         "Cpf",
         "Random.Cpf"
