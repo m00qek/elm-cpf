@@ -1,6 +1,6 @@
-module Extra.List exposing (..)
+module Extra.List exposing (cons, dropLast, last, partition, penultimate, zip)
 
-import List exposing (drop, head, isEmpty, reverse, append, take, map2)
+import List exposing (append, drop, head, isEmpty, map2, reverse, take)
 
 
 dropLast : Int -> List a -> List a
@@ -20,7 +20,7 @@ last =
 
 zip : List a -> List b -> List ( a, b )
 zip =
-    map2 (,)
+    map2 (\a b -> ( a, b ))
 
 
 cons : a -> List a -> List a
@@ -34,7 +34,8 @@ partition n =
         partition_ parts list =
             if isEmpty list then
                 parts
+
             else
                 partition_ (append parts [ take n list ]) (drop n list)
     in
-        partition_ []
+    partition_ []

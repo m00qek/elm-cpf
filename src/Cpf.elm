@@ -49,9 +49,10 @@ fromText : String -> Result Error CPF
 fromText =
     String.toList
         >> List.filter Char.isDigit
-        >> List.map (String.toInt << String.fromChar)
+        >> List.map String.fromChar
+        >> List.map String.toInt
+        >> List.map (Result.fromMaybe Internals.InvalidInput)
         >> List.foldr (Result.map2 cons) (Ok [])
-        >> Result.mapError (always Internals.InvalidInput)
         >> Result.andThen fromList
 
 
@@ -60,7 +61,7 @@ fromText =
 toString : CPF -> String
 toString (Internals.CPF numbers dv1 dv2) =
     (numbers ++ [ dv1, dv2 ])
-        |> List.map Basics.toString
+        |> List.map String.fromInt
         |> String.concat
 
 
@@ -73,7 +74,7 @@ show (Internals.CPF numbers dv1 dv2) =
             List.concat << List.intersperse [ "." ] << Extra.List.partition 3
     in
     String.concat
-        [ List.map Basics.toString numbers |> withDots |> String.concat
+        [ List.map String.fromInt numbers |> withDots |> String.concat
         , "-"
-        , List.map Basics.toString [ dv1, dv2 ] |> String.concat
+        , List.map String.fromInt [ dv1, dv2 ] |> String.concat
         ]

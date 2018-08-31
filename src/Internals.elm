@@ -14,21 +14,17 @@ type Error
     | InvalidSecondDV
 
 
-mod =
-    flip rem
-
-
 dv numbers =
     let
         f ( index, digit ) =
-            digit * (9 - rem index 10)
+            digit * (9 - remainderBy 10 index)
     in
-        List.reverse numbers
-            |> zip (List.range 0 <| List.length numbers)
-            |> List.map f
-            |> List.sum
-            |> mod 11
-            |> mod 10
+    List.reverse numbers
+        |> zip (List.range 0 <| List.length numbers)
+        |> List.map f
+        |> List.sum
+        |> remainderBy 11
+        |> remainderBy 10
 
 
 fstDV =
@@ -45,10 +41,13 @@ validate : List Int -> Int -> Int -> Result Error CPF
 validate numbers dv1 dv2 =
     if List.length numbers /= 9 then
         Err InvalidLength
+
     else if dv1 /= fstDV numbers then
         Err InvalidFirstDV
+
     else if dv2 /= sndDV dv1 numbers then
         Err InvalidSecondDV
+
     else
         Ok (CPF numbers dv1 dv2)
 
@@ -59,4 +58,4 @@ create numbers =
         dv1 =
             fstDV numbers
     in
-        CPF numbers dv1 (sndDV dv1 numbers)
+    CPF numbers dv1 (sndDV dv1 numbers)

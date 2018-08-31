@@ -13,4 +13,4 @@ liftA2 f aa ab x =
 
 liftA3 : (a -> b -> c -> d) -> (p -> a) -> (p -> b) -> (p -> c) -> (p -> d)
 liftA3 f aa ab ac =
-    liftA2 f aa ab <*> ac
+    apply (liftA2 f aa ab) ac
