@@ -45,7 +45,8 @@ validate numbers dv1 dv2 =
 
 {-| Turn a valid list of integers into a CPF.
 
-    (fromList [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 9 ] |> Result.map show) == Ok "123.456.789-09"
+    fromList [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 9 ] |> Result.map show
+    --> Ok "123.456.789-09"
 
 -}
 fromList : List Int -> Result Error CPF
@@ -57,9 +58,10 @@ fromList =
 
 {-| Turn a valid string into a CPF.
 
-    (fromText "12345678909" |> Result.map show) == Ok "123.456.789-09"
-
-    (fromText "123.456.789-09" |> Result.map show) == Ok "123.456.789-09"
+    fromText "12345678909" |> Result.map show
+    --> Ok "123.456.789-09"
+    fromText "123.456.789-09" |> Result.map show
+    --> Ok "123.456.789-09"
 
 -}
 fromText : String -> Result Error CPF
