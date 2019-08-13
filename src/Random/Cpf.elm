@@ -15,8 +15,11 @@ create numbers =
     let
         dv1 =
             firstDV numbers
+
+        dv2 =
+            secondDV dv1 numbers
     in
-    Internals.CPF numbers dv1 (secondDV dv1 numbers)
+    Internals.CPF numbers dv1 dv2
 
 
 {-| Generate a random CPF
